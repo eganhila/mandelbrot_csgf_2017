@@ -10,7 +10,7 @@ int pixelWriteout(unsigned char * pixels, int width, int height, int numPixels, 
 	int maxColorValue = 255;
 	char str[7];
 
-	snprintf(str, 7, "%03d.pgm",n);
+	snprintf(str, 8, "%03d.pgm",frame_number);
 	std::ofstream f(str, std::ios_base::out|std::ios_base::binary|std::ios_base::trunc);
 	// Writing out the header to the file
 	f << "P5\n" << width << " " << height << "\n" << maxColorValue << "\n";	
@@ -90,7 +90,7 @@ int Mandelbrot(double x, double y){
 
 }
 
-int main()
+int main(int arc, char* argv[])
 {
   double center_x, center_y, length_x, length_y, min_x, max_y, pixel_size;
   double x, y;
@@ -98,12 +98,14 @@ int main()
   int i_x, i_y, i;
   unsigned char * pixels;
   int frame_num =0;
+
+  frame_num = atoi(argv[1]);
  
   
   center_x = -0.75;
   center_y = 0.00;
-  length_x = 2.75/(1+frame_num);
-  length_y = 2.0/(1+frame_num);
+  length_x = 2.75/(1+0.1*frame_num);
+  length_y = 2.0/(1+0.1*frame_num);
   min_x = center_x -length_x/2.0;
   max_y = center_y + length_y/2.0;
   pixel_count_x = 1024;
@@ -135,6 +137,6 @@ for (i=0; i < pixel_count_x*pixel_count_y; i++)
       }
   }
 */
-  pixelWriteout(pixels, pixel_count_x, pixel_count_y, pixel_count_x*pixel_count_y);
+  pixelWriteout(pixels, pixel_count_x, pixel_count_y, pixel_count_x*pixel_count_y, frame_num);
 }
 
