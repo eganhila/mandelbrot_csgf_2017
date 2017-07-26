@@ -5,6 +5,7 @@
 #include<fstream>
 #include<stdlib.h>
 #include<stdio.h>
+#include<time.h>
 int pixelWriteout(unsigned char * pixels, int width, int height, int numPixels)
 {
 	int maxColorValue = 255;
@@ -89,6 +90,7 @@ int Mandelbrot(double x, double y){
 
 int main()
 {
+  clock_t t;
   double center_x, center_y, length_x, length_y, min_x, max_y, pixel_size;
   double x, y;
   int pixel_count_x, pixel_count_y;
@@ -132,5 +134,7 @@ for (i=0; i < pixel_count_x*pixel_count_y; i++)
   }
 */
   pixelWriteout(pixels, pixel_count_x, pixel_count_y, pixel_count_x*pixel_count_y);
+  t = clock()-t;
+  printf("%d clicks so it took %f seconds",t,((float)t)/CLOCKS_PER_SEC);
 }
 
