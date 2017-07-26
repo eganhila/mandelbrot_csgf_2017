@@ -3,7 +3,8 @@
 #include<iostream>
 #include<math.h>
 #include<fstream>
-
+#include<stdlib.h>
+#include<stdio.h>
 int pixelWriteout(int * pixels, int width, int height, int numPixels)
 {
 	int maxColorValue = 255;
@@ -22,6 +23,7 @@ int pixelWriteout(int * pixels, int width, int height, int numPixels)
 	return 0;
  }
 
+#pragma acc routine seq
 int Mandelbrot(double x, double y){
     int iter, iter_max=1000;
     double radius=0.0, z_x=0.0, z_y=0.0, radius_max=2.0;
@@ -37,7 +39,7 @@ int Mandelbrot(double x, double y){
     }
 
     if ( iter < iter_max){
-        return 1;
+        return 255;
     }
     else{
         return 0;
@@ -66,7 +68,7 @@ int main()
     
   pixels = new int[pixel_count_x*pixel_count_y];
   
-
+#pragma acc parallel loop
   for (i_x=0; i_x<pixel_count_x; i_x++){
       for (i_y=0; i_y<pixel_count_y; i_y++){
 
