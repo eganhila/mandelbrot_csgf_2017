@@ -67,10 +67,20 @@ int main()
   pixel_count_y = length_y/pixel_size;
     
   pixels = new int[pixel_count_x*pixel_count_y];
-  
+ 
 #pragma acc parallel loop
+for (i=0; i < pixel_count_x*pixel_count_y; i++)
+{
+	i_x = i % pixel_count_x;
+	i_y = i/pixel_count_y; // Note: floor by default
+	x = min_x + pixel_size*i_x;
+        y = max_y - pixel_size*i_y;
+	pixels[i] = Mandelbrot(x,y);
+}
+
+/*
   for (i_x=0; i_x<pixel_count_x; i_x++){
-      for (i_y=0; i_y<pixel_count_y; i_y++){
+    for (i_y=0; i_y<pixel_count_y; i_y++){
 
           x = min_x + pixel_size*i_x;
           y = max_y - pixel_size*i_y;
@@ -80,7 +90,7 @@ int main()
 
       }
   }
-
+*/
   pixelWriteout(pixels, pixel_count_x, pixel_count_y, pixel_count_x*pixel_count_y);
 }
 
