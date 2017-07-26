@@ -25,7 +25,7 @@ int pixelWriteout(int * pixels, int width, int height, int numPixels, int numRow
 int Mandelbrot(double x, double y){
     int iter, iter_max=1000;
     double radius=0.0, z_x=0.0, z_y=0.0, radius_max=2.0;
-
+    iter = 0;
     while ((radius < radius_max) && (iter < iter_max)){
 
         z_x = x*x-y*y+x;
