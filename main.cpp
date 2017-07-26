@@ -20,6 +20,49 @@ int pixelWriteout(unsigned char * pixels, int width, int height, int numPixels)
 	return 0;
  }
 
+void HSVtoRGB(double H, double S, double V,  int & R, int & G, int & B){
+    double C, H2, X, m;
+
+    C = V * S;
+    H2 = H/60.0;
+    X = C * (1 - fabs(fmod(H2, 2.0)-1));
+    if (H2 <1){
+        R = C;
+        G = X; 
+        B = 0;
+    }
+    else if (H2<2) {
+        R = X;
+        G = C;
+        B = 0;
+    }
+    else if (H2<3) {
+        R = 0;
+        G = C;
+        B = X;
+    }
+    else if (H2<4) {
+        R = 0;
+        G = X;
+        B = C;
+    }
+    else if (H2<5) {
+        R = X;
+        G = 0;
+        B = C;
+    }
+    else {
+        R = C;
+        G = 0;
+        B = X;
+    }
+
+    m = V-C;
+    R = R+m;
+    G = G+m;
+    B = B+m;
+}
+
 #pragma acc routine seq
 int Mandelbrot(double x, double y){
     int iter, iter_max=1000;
