@@ -4,7 +4,7 @@
 #include<math.h>
 #include<fstream>
 
-int pixelWriteout(int * pixels, int width, int height, int numPixels)
+int pixelWriteout(unsigned char * pixels, int width, int height, int numPixels)
 {
 	int maxColorValue = 255;
 	std::ofstream f("test.pgm", std::ios_base::out|std::ios_base::binary|std::ios_base::trunc);
@@ -13,10 +13,7 @@ int pixelWriteout(int * pixels, int width, int height, int numPixels)
 	// Writing out the data to the file
 	for (int i = 0; i<numPixels; i++)
 	{
-		if (i % (height-1) == 0)
-			f << pixels[i] << "\n";
-		else	
-			f << pixels[i] << " ";
+	    f << pixels[i];
 	}
 	f.close();
 	return 0;
@@ -37,7 +34,7 @@ int Mandelbrot(double x, double y){
     }
 
     if ( iter < iter_max){
-        return 1;
+        return 255;
     }
     else{
         return 0;
@@ -51,7 +48,7 @@ int main()
   double x, y;
   int pixel_count_x, pixel_count_y;
   int i_x, i_y, i;
-  int * pixels;
+  unsigned char * pixels;
  
   
   center_x = -0.75;
@@ -64,7 +61,7 @@ int main()
   pixel_size = length_x/pixel_count_x;
   pixel_count_y = length_y/pixel_size;
     
-  pixels = new int[pixel_count_x*pixel_count_y];
+  pixels = new unsigned char[pixel_count_x*pixel_count_y];
   
 
   for (i_x=0; i_x<pixel_count_x; i_x++){
