@@ -27,9 +27,10 @@ int Mandelbrot(double x, double y){
     double radius=0.0, z_x=0.0, z_y=0.0, radius_max=2.0;
     iter = 0;
     while ((radius < radius_max) && (iter < iter_max)){
-
-        z_x = x*x-y*y+x;
-        z_y = 2*x*y+y;
+	double z_x_temp = z_x;
+	double z_y_temp =z_y;
+        z_x = z_x_temp * z_x_temp - z_y_temp*z_y_temp+x;
+        z_y = 2*z_x_temp*z_y_temp+y;
         radius = pow(z_x*z_x+z_y*z_y, 0.5);
 
         iter = iter + 1;
