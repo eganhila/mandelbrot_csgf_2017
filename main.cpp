@@ -41,11 +41,22 @@ int main()
 
 int Mandelbrot(double x, double y){
     int iter, iter_max=1000;
-    double radius_z, radius_max=2.0;
+    double radius=0.0, z_x=0.0, z_y=0.0, radius_max=2.0;
 
-    while ((radius_x < radius_max) && (iter < iter_max)){
+    while ((radius < radius_max) && (iter < iter_max)){
 
+        z_x = x**2-y**2+x;
+        z_y = 2*x*y+y;
+        radius = (z_x**2+z_y**2)**0.5;
 
+        iter = iter + 1;
+    }
+
+    if ( iter < iter_max){
+        return 1;
+    }
+    else{
+        return 0;
     }
 
 }
