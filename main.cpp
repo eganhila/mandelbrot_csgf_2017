@@ -13,7 +13,7 @@ int pixelWriteout(int * pixels, int width, int height, int numPixels, int numRow
 	// Writing out the data to the file
 	for (int i = 1; i<numPixels; i++)
 	{
-		if (pixels[i] % numRow == 0)
+		if (i % numRow == 0)
 			f << pixels[i] << "\n";
 		else	
 			f << pixels[i] << " ";
@@ -36,7 +36,7 @@ int Mandelbrot(double x, double y){
     }
 
     if ( iter < iter_max){
-        return 1;
+        return 255;
     }
     else{
         return 0;
@@ -59,7 +59,7 @@ int main()
   length_y = 2.0;
   min_x = center_x -length_x/2.0;
   max_y = center_y + length_y/2.0;
-  pixel_count_x = 8192;
+  pixel_count_x = 1024;
   pixel_size = length_x/pixel_count_x;
   pixel_count_y = length_y/pixel_size;
     
