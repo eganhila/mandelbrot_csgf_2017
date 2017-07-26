@@ -5,7 +5,7 @@
 #include<fstream>
 #include<stdlib.h>
 #include<stdio.h>
-int pixelWriteout(int * pixels, int width, int height, int numPixels)
+int pixelWriteout(unsigned char * pixels, int width, int height, int numPixels)
 {
 	int maxColorValue = 255;
 	std::ofstream f("test.pgm", std::ios_base::out|std::ios_base::binary|std::ios_base::trunc);
@@ -14,37 +14,42 @@ int pixelWriteout(int * pixels, int width, int height, int numPixels)
 	// Writing out the data to the file
 	for (int i = 0; i<numPixels; i++)
 	{
-		if (i % (height-1) == 0)
-			f << pixels[i] << "\n";
-		else	
-			f << pixels[i] << " ";
+	    f << pixels[i];
 	}
 	f.close();
 	return 0;
  }
 
+int Color(double distance, double pixelSize)
+{
+        if (distance < 0.5*pixelSize)
+                return (pow(distance/(.5*pixelSize),.3333333)*255);
+        else
+                return 255;
+}
+
 #pragma acc routine seq
-int Mandelbrot(double x, double y){
-    int iter, iter_max=1000;
-    double radius=0.0, z_x=0.0, z_y=0.0, radius_max=2.0;
+int Mandelbrot(double x, double y, double pixel_size){
+    int iter, iter_max=10000;
+    double distance = 0.0,dz_x=0.0, dz_y=0.0, radius=0.0, z_x=0.0, z_y=0.0, radius_max=18.0;
     iter = 0;
     while ((radius < radius_max) && (iter < iter_max)){
-	double z_x_temp = z_x;
-	double z_y_temp =z_y;
+        double z_x_temp = z_x;
+        double z_y_temp =z_y;
+        double dz_x_temp = dz_x;
+        double dz_y_temp = dz_y;
+        dz_x = 2*(z_x_temp*dz_x_temp - z_y_temp*dz_y_temp) + 1;
+        dz_y = 2*(z_y_temp*dz_x_temp + z_x_temp*dz_y_temp);
         z_x = z_x_temp * z_x_temp - z_y_temp*z_y_temp+x;
         z_y = 2*z_x_temp*z_y_temp+y;
         radius = pow(z_x*z_x+z_y*z_y, 0.5);
-
         iter = iter + 1;
     }
-
-    if ( iter < iter_max){
-        return 255;
-    }
-    else{
-        return 0;
-    }
-
+    double mag_dz = pow(dz_x*dz_x + dz_y*dz_y, 0.5);
+    //double mag_z =  pow(z_x*z_x + z_y*z_y, 0.5);
+    //distance = 2*log(mag_z)*mag_z/mag_dz;
+    distance = 2*log(radius)*radius/mag_dz;
+    return Color(distance, pixel_size);
 }
 
 int main()
@@ -53,7 +58,7 @@ int main()
   double x, y;
   int pixel_count_x, pixel_count_y;
   int i_x, i_y, i;
-  int * pixels;
+  unsigned char * pixels;
  
   
   center_x = -0.75;
@@ -62,11 +67,11 @@ int main()
   length_y = 2.0;
   min_x = center_x -length_x/2.0;
   max_y = center_y + length_y/2.0;
-  pixel_count_x = 1024;
+  pixel_count_x = 8192;
   pixel_size = length_x/pixel_count_x;
   pixel_count_y = length_y/pixel_size;
-    
-  pixels = new int[pixel_count_x*pixel_count_y];
+  pixels = new unsigned char[pixel_count_x*pixel_count_y];
+  
  
 #pragma acc parallel loop
 for (i=0; i < pixel_count_x*pixel_count_y; i++)
@@ -75,7 +80,7 @@ for (i=0; i < pixel_count_x*pixel_count_y; i++)
 	i_y = i/pixel_count_y; // Note: floor by default
 	x = min_x + pixel_size*i_x;
         y = max_y - pixel_size*i_y;
-	pixels[i] = Mandelbrot(x,y);
+	pixels[i] = Mandelbrot(x,y, pixel_size);
 }
 
 /*
