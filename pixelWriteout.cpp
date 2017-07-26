@@ -27,7 +27,3 @@ int pixelWriteout(int * pixels, int width, int height, int numPixels, int numRow
 	return 0;
  }
 
-int main()
-{
-return 0;
-}

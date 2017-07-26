@@ -2,6 +2,25 @@
 
 #include<iostream>
 #include<math.h>
+#include<fstream>
+
+int pixelWriteout(int * pixels, int width, int height, int numPixels, int numRow)
+{
+	int maxColorValue = 255;
+	std::ofstream f("test.pgm", std::ios_base::out|std::ios_base::binary|std::ios_base::trunc);
+	// Writing out the header to the file
+	f << "P5\n" << width << " " << height << "\n" << maxColorValue << "\n";	
+	// Writing out the data to the file
+	for (int i = 1; i<numPixels; i++)
+	{
+		if (pixels[i] % numRow == 0)
+			f << pixels[i] << "\n";
+		else	
+			f << pixels[i] << " ";
+	}
+	f.close();
+	return 0;
+ }
 
 int Mandelbrot(double x, double y){
     int iter, iter_max=1000;
@@ -58,6 +77,8 @@ int main()
 
       }
   }
+
+  pixelWriteout(pixels, pixel_count_x, pixel_count_y, pixel_count_x*pixel_count_y, pixel_count_y);
 
 
 }
