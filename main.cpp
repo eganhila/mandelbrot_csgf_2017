@@ -5,7 +5,7 @@
 #include<fstream>
 #include<stdlib.h>
 #include<stdio.h>
-int pixelWriteout(int * pixels, int width, int height, int numPixels)
+int pixelWriteout(unsigned char * pixels, int width, int height, int numPixels)
 {
 	int maxColorValue = 255;
 	std::ofstream f("test.pgm", std::ios_base::out|std::ios_base::binary|std::ios_base::trunc);
@@ -59,7 +59,7 @@ int main()
   length_y = 2.0;
   min_x = center_x -length_x/2.0;
   max_y = center_y + length_y/2.0;
-  pixel_count_x = 1024;
+  pixel_count_x = 8192;
   pixel_size = length_x/pixel_count_x;
   pixel_count_y = length_y/pixel_size;
   pixels = new unsigned char[pixel_count_x*pixel_count_y];
